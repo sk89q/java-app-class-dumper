@@ -1,0 +1,44 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
+}
+
+import javax.tools.ToolProvider
+
+group 'com.sk89q'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.beust:jcommander:1.48'
+    compile files(((URLClassLoader) ToolProvider.getSystemToolClassLoader()).getURLs())
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('com.beust:jcommander'))
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "com.sk89q.spilledgrounds.SpilledGrounds",
+                "Agent-Class": "com.sk89q.spilledgrounds.agent.ClassDumpAgent",
+                "Can-Redefine-Classes": "true",
+                "Can-Retransform-Classes": "true"
+        )
+    }
+}
+
+build.dependsOn(shadowJar)
