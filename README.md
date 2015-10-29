@@ -1,4 +1,4 @@
-# Spilled Beans
+# Spilled Grounds
 
 A tool to dump Java .class files from a running JVM instance.
 
